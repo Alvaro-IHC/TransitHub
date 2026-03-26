@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -46,5 +47,12 @@ public class TicketAgent extends User {
 
     @OneToMany(mappedBy = "registerBy")
     private List<Parcel> registerParcels;
-}
 
+    public String getShiftStart() {
+        return shiftStart.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getShiftEnd() {
+        return shiftEnd.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+}
