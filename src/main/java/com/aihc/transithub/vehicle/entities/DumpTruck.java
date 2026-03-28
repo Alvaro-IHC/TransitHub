@@ -15,5 +15,4 @@ import lombok.Setter;
 @Entity
 @Table(name = "dump_trucks")
 public class DumpTruck extends Vehicle {
-    private Integer capacity;
 }

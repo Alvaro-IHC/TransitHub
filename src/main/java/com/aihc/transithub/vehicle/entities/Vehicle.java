@@ -28,6 +28,8 @@ public class Vehicle {
 
     private String brand;
 
+    private Integer capacity;
+
     @Column(name = "licence_plate")
     private String licensePlate;
 
