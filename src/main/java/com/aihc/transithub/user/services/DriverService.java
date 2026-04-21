@@ -145,6 +145,7 @@ public class DriverService extends UserService {
                 .drivingLicense(driver.getDrivingLicense())
                 .category(driver.getCategory())
                 .type(driver.getType())
+                .vehicleId(driver.getVehicle() != null ? driver.getVehicle().getId() : null)
                 .build();
     }
 }
