@@ -6,6 +6,7 @@ import com.aihc.transithub.vehicle.dtos.MinibusCreateDto;
 import com.aihc.transithub.vehicle.dtos.MinibusResponseDto;
 import com.aihc.transithub.vehicle.dtos.MinibusUpdateDto;
 import com.aihc.transithub.vehicle.entities.Minibus;
+import com.aihc.transithub.vehicle.entities.MinibusStatus;
 import com.aihc.transithub.vehicle.repositories.MinibusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,10 @@ public class MinibusService {
         minibus.setLicensePlate(minibusCreateDto.getLicensePlate());
         minibus.setGroupName(minibusCreateDto.getGroupName());
 
+        if (minibusCreateDto.getStatus() != null) {
+            minibus.setStatus(minibusCreateDto.getStatus());
+        }
+
         if (minibusCreateDto.getDriverId() != null) {
             Driver driver = driverRepository.findById(minibusCreateDto.getDriverId())
                     .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + minibusCreateDto.getDriverId()));
@@ -68,6 +73,17 @@ public class MinibusService {
     public List<MinibusResponseDto> getAllMinibuses() {
         return minibusRepository.findAll()
                 .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get minibuses by status
+     */
+    public List<MinibusResponseDto> getMinibusesByStatus(MinibusStatus status) {
+        return minibusRepository.findAll()
+                .stream()
+                .filter(minibus -> minibus.getStatus() == status)
                 .map(this::mapToResponseDto)
                 .collect(Collectors.toList());
     }
@@ -104,6 +120,9 @@ public class MinibusService {
             Driver driver = driverRepository.findById(minibusUpdateDto.getDriverId())
                     .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + minibusUpdateDto.getDriverId()));
             minibus.setDriver(driver);
+        }
+        if (minibusUpdateDto.getStatus() != null) {
+            minibus.setStatus(minibusUpdateDto.getStatus());
         }
 
         Minibus updatedMinibus = minibusRepository.save(minibus);
@@ -148,6 +167,7 @@ public class MinibusService {
                 .licensePlate(minibus.getLicensePlate())
                 .groupName(minibus.getGroupName())
                 .driverId(minibus.getDriver() != null ? minibus.getDriver().getId() : null)
+                .status(minibus.getStatus())
                 .build();
     }
 }

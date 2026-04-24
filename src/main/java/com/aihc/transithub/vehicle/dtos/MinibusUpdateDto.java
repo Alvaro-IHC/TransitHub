@@ -3,6 +3,7 @@ package com.aihc.transithub.vehicle.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.aihc.transithub.vehicle.entities.MinibusStatus;
 
 import java.util.UUID;
 
@@ -23,4 +24,5 @@ public class MinibusUpdateDto {
     private String licensePlate;
     private String groupName;
     private UUID driverId;
+    private MinibusStatus status;
 }

@@ -3,6 +3,7 @@ package com.aihc.transithub.vehicle.controllers;
 import com.aihc.transithub.vehicle.dtos.MinibusCreateDto;
 import com.aihc.transithub.vehicle.dtos.MinibusResponseDto;
 import com.aihc.transithub.vehicle.dtos.MinibusUpdateDto;
+import com.aihc.transithub.vehicle.entities.MinibusStatus;
 import com.aihc.transithub.vehicle.services.MinibusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,12 +54,17 @@ public class MinibusController {
     }
 
     /**
-     * GET: Get all minibuses
-     * Endpoint: GET /api/minibuses
+     * GET: Get all minibuses or filter by status
+     * Endpoint: GET /api/minibuses?status=ACTIVE or GET /api/minibuses?status=INACTIVE or GET /api/minibuses (all)
      */
     @GetMapping
-    public ResponseEntity<List<MinibusResponseDto>> getAllMinibuses() {
-        List<MinibusResponseDto> minibuses = minibusService.getAllMinibuses();
+    public ResponseEntity<List<MinibusResponseDto>> getAllMinibuses(@RequestParam(required = false) MinibusStatus status) {
+        List<MinibusResponseDto> minibuses;
+        if (status != null) {
+            minibuses = minibusService.getMinibusesByStatus(status);
+        } else {
+            minibuses = minibusService.getAllMinibuses();
+        }
         return ResponseEntity.ok(minibuses);
     }
 

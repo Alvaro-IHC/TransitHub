@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.aihc.transithub.vehicle.entities.MinibusStatus;
 
 import java.util.UUID;
 
@@ -26,4 +27,5 @@ public class MinibusResponseDto {
     private String licensePlate;
     private String groupName;
     private UUID driverId;
+    private MinibusStatus status;
 }
