@@ -1,21 +1,24 @@
 package com.aihc.transithub.vehicle.dtos;
 
+import com.aihc.transithub.vehicle.entities.VehicleType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.aihc.transithub.vehicle.entities.MinibusStatus;
 
 import java.util.UUID;
 
 /**
- * Data Transfer Object for updating a minibus in the system.
+ * Data Transfer Object for vehicle response in the system.
  *
  * @author Alvaro Huanca
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MinibusUpdateDto {
+@Builder
+public class VehicleResponseDto {
+    private UUID id;
     private String ruat;
     private String model;
     private String brand;
@@ -23,5 +26,5 @@ public class MinibusUpdateDto {
     private String licensePlate;
     private String groupName;
     private UUID driverId;
-    private MinibusStatus status;
+    private VehicleType type;
 }

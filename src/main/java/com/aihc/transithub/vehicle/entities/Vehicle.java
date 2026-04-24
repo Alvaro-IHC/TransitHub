@@ -24,8 +24,6 @@ public class Vehicle {
 
     private String model;
 
-    private String type;
-
     private String brand;
 
     private Integer capacity;
@@ -40,4 +38,3 @@ public class Vehicle {
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;
 }
-

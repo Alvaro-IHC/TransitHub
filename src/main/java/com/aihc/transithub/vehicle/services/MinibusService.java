@@ -38,7 +38,6 @@ public class MinibusService {
         Minibus minibus = new Minibus();
         minibus.setRuat(minibusCreateDto.getRuat());
         minibus.setModel(minibusCreateDto.getModel());
-        minibus.setType(minibusCreateDto.getType());
         minibus.setBrand(minibusCreateDto.getBrand());
         minibus.setCapacity(minibusCreateDto.getCapacity());
         minibus.setLicensePlate(minibusCreateDto.getLicensePlate());
@@ -101,9 +100,6 @@ public class MinibusService {
         if (minibusUpdateDto.getModel() != null) {
             minibus.setModel(minibusUpdateDto.getModel());
         }
-        if (minibusUpdateDto.getType() != null) {
-            minibus.setType(minibusUpdateDto.getType());
-        }
         if (minibusUpdateDto.getBrand() != null) {
             minibus.setBrand(minibusUpdateDto.getBrand());
         }
@@ -161,7 +157,6 @@ public class MinibusService {
                 .id(minibus.getId())
                 .ruat(minibus.getRuat())
                 .model(minibus.getModel())
-                .type(minibus.getType())
                 .brand(minibus.getBrand())
                 .capacity(minibus.getCapacity())
                 .licensePlate(minibus.getLicensePlate())

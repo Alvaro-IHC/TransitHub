@@ -21,7 +21,6 @@ public class MinibusResponseDto {
     private UUID id;
     private String ruat;
     private String model;
-    private String type;
     private String brand;
     private Integer capacity;
     private String licensePlate;
