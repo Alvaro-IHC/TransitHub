@@ -5,6 +5,8 @@ import com.aihc.transithub.user.dtos.DriverResponseDto;
 import com.aihc.transithub.user.dtos.DriverUpdateDto;
 import com.aihc.transithub.user.entities.Driver;
 import com.aihc.transithub.user.repositories.DriverRepository;
+import com.aihc.transithub.vehicle.entities.Vehicle;
+import com.aihc.transithub.vehicle.repositories.VehicleRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class DriverService extends UserService {
     @Autowired
     private DriverRepository driverRepository;
 
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
     /**
      * Create a new driver
      */
@@ -40,9 +45,23 @@ public class DriverService extends UserService {
         driver.setDrivingLicense(driverCreateDto.getDrivingLicense());
         driver.setCategory(driverCreateDto.getCategory());
         driver.setType(driverCreateDto.getType());
+        driver.setVehicles(driverCreateDto.getVehicleIds() != null
+                ? getVehicles(driverCreateDto.getVehicleIds(), driver)
+                : null);
         
         Driver savedDriver = driverRepository.save(driver);
         return mapToResponseDto(savedDriver);
+    }
+
+    private List<Vehicle> getVehicles(List<UUID> vehicleIds, Driver driver) {
+        return vehicleIds.stream()
+                .map(vehicleId -> {
+                    Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                            .orElseThrow(() -> new IllegalArgumentException("Vehicle not found with ID: " + vehicleId));
+                    vehicle.setDriver(driver);
+                    return vehicle;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
@@ -101,6 +120,9 @@ public class DriverService extends UserService {
         if (driverUpdateDto.getType() != null) {
             driver.setType(driverUpdateDto.getType());
         }
+        if (driverUpdateDto.getVehicleIds() != null) {
+            driver.setVehicles(getVehicles(driverUpdateDto.getVehicleIds(), driver));
+        }
         
         Driver updatedDriver = driverRepository.save(driver);
         return mapToResponseDto(updatedDriver);
@@ -110,9 +132,17 @@ public class DriverService extends UserService {
      * Delete a driver by id.
      */
     public void deleteDriver(UUID id) {
-        if (!driverRepository.existsById(id)) {
-            throw new IllegalArgumentException("Driver not found, ID: " + id);
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found, ID: " + id));
+        
+        // Orphan the vehicles by setting their driver to null
+        if (driver.getVehicles() != null) {
+            driver.getVehicles().forEach(vehicle -> {
+                vehicle.setDriver(null);
+                vehicleRepository.save(vehicle);
+            });
         }
+        
         driverRepository.deleteById(id);
     }
 
@@ -145,7 +175,9 @@ public class DriverService extends UserService {
                 .drivingLicense(driver.getDrivingLicense())
                 .category(driver.getCategory())
                 .type(driver.getType())
-                .vehicleId(driver.getVehicle() != null ? driver.getVehicle().getId() : null)
+                .vehicleIds(driver.getVehicles() != null
+                        ? driver.getVehicles().stream().map(Vehicle::getId).collect(Collectors.toList())
+                        : null)
                 .build();
     }
 }

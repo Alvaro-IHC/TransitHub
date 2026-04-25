@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 /**
  * DTO to create a driver instance.
  *
@@ -18,6 +21,7 @@ public class DriverCreateDto extends UserCreateDto {
     private String drivingLicense;
     private String category;
     private String type;
+    private List<UUID> vehicleIds;
 }
 
 

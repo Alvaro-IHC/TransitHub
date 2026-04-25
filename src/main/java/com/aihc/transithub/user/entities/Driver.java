@@ -1,13 +1,12 @@
 package com.aihc.transithub.user.entities;
 
 import com.aihc.transithub.vehicle.entities.Vehicle;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * The Driver class represents a driver in the system. It extends the User class,
@@ -28,7 +27,6 @@ public class Driver extends User {
 
     private String type;
 
-    // 'mappedBy' points to the field name in the Vehicle class
-    @OneToOne(mappedBy = "driver")
-    private Vehicle vehicle;
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.PERSIST)
+    private List<Vehicle> vehicles;
 }

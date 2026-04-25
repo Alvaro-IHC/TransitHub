@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 /**
  * DTO to update a driver instance.
  *
@@ -18,5 +21,6 @@ public class DriverUpdateDto extends UserUpdateDto {
     private String drivingLicense;
     private String category;
     private String type;
+    private List<UUID> vehicleIds;
 }
 

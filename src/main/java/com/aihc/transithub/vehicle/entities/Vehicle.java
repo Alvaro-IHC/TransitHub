@@ -34,7 +34,7 @@ public class Vehicle {
     @Column(name = "group_name")
     private String groupName;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;
 }

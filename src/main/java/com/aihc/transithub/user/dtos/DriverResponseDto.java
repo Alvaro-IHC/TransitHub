@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,5 +22,5 @@ public class DriverResponseDto extends UserResponseDto {
     private String drivingLicense;
     private String category;
     private String type;
-    private UUID vehicleId;
+    private List<UUID> vehicleIds;
 }
