@@ -1,9 +1,11 @@
 package com.aihc.transithub.vehicle.entities;
 
+import com.aihc.transithub.finance.entities.Contribution;
 import com.aihc.transithub.user.entities.Driver;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,4 +39,7 @@ public class Vehicle {
     @ManyToOne
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;
+
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
+    private List<Contribution> contributions;
 }

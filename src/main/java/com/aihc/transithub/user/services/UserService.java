@@ -3,8 +3,14 @@ package com.aihc.transithub.user.services;
 import com.aihc.transithub.user.dtos.UserCreateDto;
 import com.aihc.transithub.user.dtos.UserResponseDto;
 import com.aihc.transithub.user.dtos.UserUpdateDto;
+import com.aihc.transithub.user.dtos.UserWithRoleDto;
 import com.aihc.transithub.user.entities.User;
+import com.aihc.transithub.user.enums.UserRole;
+import com.aihc.transithub.user.repositories.AdminRepository;
+import com.aihc.transithub.user.repositories.DriverRepository;
+import com.aihc.transithub.user.repositories.TreasurerRepository;
 import com.aihc.transithub.user.repositories.UserRepository;
+import com.aihc.transithub.user.repositories.TicketAgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +28,18 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private DriverRepository driverRepository;
+
+    @Autowired
+    private TreasurerRepository treasurerRepository;
+
+    @Autowired
+    private TicketAgentRepository ticketAgentRepository;
 
     /**
      * Create a new user
@@ -135,6 +153,64 @@ public class UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .build();
+    }
+
+    /**
+     * Get users by specific roles
+     * If roles is null or empty, returns all users
+     */
+    public List<UserWithRoleDto> getUsersByRoles(List<String> roles) {
+        List<UserRole> userRoles = roles == null || roles.isEmpty() 
+                ? List.of(UserRole.values()) 
+                : roles.stream().map(UserRole::valueOf).collect(Collectors.toList());
+
+        List<UserWithRoleDto> result = new java.util.ArrayList<>();
+
+        for (UserRole role : userRoles) {
+            switch (role) {
+                case ADMIN:
+                    result.addAll(adminRepository.findAll()
+                            .stream()
+                            .map(admin -> mapToUserWithRoleDto(admin, UserRole.ADMIN))
+                            .collect(Collectors.toList()));
+                    break;
+                case TICKET_AGENT:
+                    result.addAll(ticketAgentRepository.findAll()
+                            .stream()
+                            .map(agent -> mapToUserWithRoleDto(agent, UserRole.TICKET_AGENT))
+                            .collect(Collectors.toList()));
+                    break;
+                case DRIVER:
+                    result.addAll(driverRepository.findAll()
+                            .stream()
+                            .map(driver -> mapToUserWithRoleDto(driver, UserRole.DRIVER))
+                            .collect(Collectors.toList()));
+                    break;
+                case TREASURER:
+                    result.addAll(treasurerRepository.findAll()
+                            .stream()
+                            .map(treasurer -> mapToUserWithRoleDto(treasurer, UserRole.TREASURER))
+                            .collect(Collectors.toList()));
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Map User entity to UserWithRoleDto with role information
+     */
+    protected UserWithRoleDto mapToUserWithRoleDto(User user, UserRole role) {
+        return UserWithRoleDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .role(role)
                 .build();
     }
 }

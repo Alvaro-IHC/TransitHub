@@ -29,4 +29,5 @@ public class Driver extends User {
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.PERSIST)
     private List<Vehicle> vehicles;
+
 }

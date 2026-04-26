@@ -3,6 +3,7 @@ package com.aihc.transithub.user.controllers;
 import com.aihc.transithub.user.dtos.UserCreateDto;
 import com.aihc.transithub.user.dtos.UserResponseDto;
 import com.aihc.transithub.user.dtos.UserUpdateDto;
+import com.aihc.transithub.user.dtos.UserWithRoleDto;
 import com.aihc.transithub.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,6 +104,23 @@ public class UserController {
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * GET: Get users by roles
+     * Endpoint: GET /api/users/roles/search?roles=ADMIN,TICKET_AGENT
+     * or GET /api/users/roles/search?roles=ADMIN&roles=TICKET_AGENT
+     * If no roles are provided, returns all users with their roles
+     */
+    @GetMapping("/roles/search")
+    public ResponseEntity<List<UserWithRoleDto>> getUsersByRoles(
+            @RequestParam(name = "roles", required = false) List<String> roles) {
+        try {
+            List<UserWithRoleDto> users = userService.getUsersByRoles(roles);
+            return ResponseEntity.ok(users);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
