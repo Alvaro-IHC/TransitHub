@@ -37,6 +37,7 @@ public class TreasurerService extends UserService {
         treasurer.setLastName(treasurerCreateDto.getLastName());
         treasurer.setEmail(treasurerCreateDto.getEmail());
         treasurer.setPhone(treasurerCreateDto.getPhone());
+        treasurer.setPhotoUrl(treasurerCreateDto.getPhotoUrl());
         treasurer.setOfficeNumber(treasurerCreateDto.getOfficeNumber());
         treasurer.setPositionStartDate(treasurerCreateDto.getPositionStartDate());
         treasurer.setBankAccount(treasurerCreateDto.getBankAccount());
@@ -92,6 +93,9 @@ public class TreasurerService extends UserService {
         if (treasurerUpdateDto.getPhone() != null) {
             treasurer.setPhone(treasurerUpdateDto.getPhone());
         }
+        if (treasurerUpdateDto.getPhotoUrl() != null) {
+            treasurer.setPhotoUrl(treasurerUpdateDto.getPhotoUrl());
+        }
         if (treasurerUpdateDto.getOfficeNumber() != null) {
             treasurer.setOfficeNumber(treasurerUpdateDto.getOfficeNumber());
         }
@@ -138,6 +142,7 @@ public class TreasurerService extends UserService {
                 .lastName(treasurer.getLastName())
                 .email(treasurer.getEmail())
                 .phone(treasurer.getPhone())
+                .photoUrl(treasurer.getPhotoUrl())
                 .officeNumber(treasurer.getOfficeNumber())
                 .positionStartDate(treasurer.getPositionStartDate())
                 .bankAccount(treasurer.getBankAccount())

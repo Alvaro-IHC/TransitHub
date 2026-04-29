@@ -52,6 +52,7 @@ public class VehicleService {
         vehicle.setCapacity(vehicleCreateDto.getCapacity());
         vehicle.setLicensePlate(vehicleCreateDto.getLicensePlate());
         vehicle.setGroupName(vehicleCreateDto.getGroupName());
+        vehicle.setPhotoUrl(vehicleCreateDto.getPhotoUrl());
 
         if (vehicleCreateDto.getDriverId() != null) {
             Driver driver = driverRepository.findById(vehicleCreateDto.getDriverId())
@@ -119,6 +120,9 @@ public class VehicleService {
                     .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + vehicleUpdateDto.getDriverId()));
             vehicle.setDriver(driver);
         }
+        if (vehicleUpdateDto.getPhotoUrl() != null) {
+            vehicle.setPhotoUrl(vehicleUpdateDto.getPhotoUrl());
+        }
 
         Vehicle updatedVehicle = vehicleRepository.save(vehicle);
         return mapToResponseDto(updatedVehicle);
@@ -174,6 +178,7 @@ public class VehicleService {
                 .groupName(vehicle.getGroupName())
                 .driverId(vehicle.getDriver() != null ? vehicle.getDriver().getId() : null)
                 .type(type)
+                .photoUrl(vehicle.getPhotoUrl())
                 .build();
     }
 }

@@ -36,4 +36,7 @@ public class User {
     private String email;
 
     private String phone;
+
+    @Column(name = "photo_url")
+    private String photoUrl;
 }

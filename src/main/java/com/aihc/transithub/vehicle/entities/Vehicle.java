@@ -36,6 +36,9 @@ public class Vehicle {
     @Column(name = "group_name")
     private String groupName;
 
+    @Column(name = "photo_url")
+    private String photoUrl;
+
     @ManyToOne
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;

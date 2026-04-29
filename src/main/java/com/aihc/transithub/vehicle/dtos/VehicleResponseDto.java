@@ -27,4 +27,5 @@ public class VehicleResponseDto {
     private String groupName;
     private UUID driverId;
     private VehicleType type;
+    private String photoUrl;
 }

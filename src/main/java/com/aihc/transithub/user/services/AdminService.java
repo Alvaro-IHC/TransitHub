@@ -37,6 +37,7 @@ public class AdminService extends UserService {
         admin.setLastName(adminCreateDto.getLastName());
         admin.setEmail(adminCreateDto.getEmail());
         admin.setPhone(adminCreateDto.getPhone());
+        admin.setPhotoUrl(adminCreateDto.getPhotoUrl());
         admin.setPosition(adminCreateDto.getPosition());
         admin.setPositionStartDate(adminCreateDto.getPositionStartDate());
         admin.setAccessLevel(adminCreateDto.getAccessLevel());
@@ -92,6 +93,9 @@ public class AdminService extends UserService {
         if (adminUpdateDto.getPhone() != null) {
             admin.setPhone(adminUpdateDto.getPhone());
         }
+        if (adminUpdateDto.getPhotoUrl() != null) {
+            admin.setPhotoUrl(adminUpdateDto.getPhotoUrl());
+        }
         if (adminUpdateDto.getPosition() != null) {
             admin.setPosition(adminUpdateDto.getPosition());
         }
@@ -138,6 +142,7 @@ public class AdminService extends UserService {
                 .lastName(admin.getLastName())
                 .email(admin.getEmail())
                 .phone(admin.getPhone())
+                .photoUrl(admin.getPhotoUrl())
                 .position(admin.getPosition())
                 .positionStartDate(admin.getPositionStartDate())
                 .accessLevel(admin.getAccessLevel())

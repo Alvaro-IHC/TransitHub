@@ -54,7 +54,8 @@ public class UserService {
         user.setLastName(userCreateDto.getLastName());
         user.setEmail(userCreateDto.getEmail());
         user.setPhone(userCreateDto.getPhone());
-        
+        user.setPhotoUrl(userCreateDto.getPhotoUrl());
+
         User savedUser = userRepository.save(user);
         return mapToResponseDto(savedUser);
     }
@@ -106,7 +107,10 @@ public class UserService {
         if (userUpdateDto.getPhone() != null) {
             user.setPhone(userUpdateDto.getPhone());
         }
-        
+        if (userUpdateDto.getPhotoUrl() != null) {
+            user.setPhotoUrl(userUpdateDto.getPhotoUrl());
+        }
+
         User updatedUser = userRepository.save(user);
         return mapToResponseDto(updatedUser);
     }
@@ -153,6 +157,7 @@ public class UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
+                .photoUrl(user.getPhotoUrl())
                 .build();
     }
 
@@ -211,6 +216,7 @@ public class UserService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .role(role)
+                .photoUrl(user.getPhotoUrl())
                 .build();
     }
 }

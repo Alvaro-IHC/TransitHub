@@ -37,6 +37,7 @@ public class TicketAgentService extends UserService {
         ticketAgent.setLastName(ticketAgentCreateDto.getLastName());
         ticketAgent.setEmail(ticketAgentCreateDto.getEmail());
         ticketAgent.setPhone(ticketAgentCreateDto.getPhone());
+        ticketAgent.setPhotoUrl(ticketAgentCreateDto.getPhotoUrl());
         ticketAgent.setTerminalName(ticketAgentCreateDto.getTerminalName());
         ticketAgent.setShiftStart(LocalTime.of(8, 0));
         ticketAgent.setShiftEnd(LocalTime.of(18, 0));
@@ -93,6 +94,9 @@ public class TicketAgentService extends UserService {
         if (ticketAgentUpdateDto.getPhone() != null) {
             ticketAgent.setPhone(ticketAgentUpdateDto.getPhone());
         }
+        if (ticketAgentUpdateDto.getPhotoUrl() != null) {
+            ticketAgent.setPhotoUrl(ticketAgentUpdateDto.getPhotoUrl());
+        }
         if (ticketAgentUpdateDto.getCounterNumber() != null) {
             ticketAgent.setCounterNumber(ticketAgentUpdateDto.getCounterNumber());
         }
@@ -141,6 +145,7 @@ public class TicketAgentService extends UserService {
                 .lastName(ticketAgent.getLastName())
                 .email(ticketAgent.getEmail())
                 .phone(ticketAgent.getPhone())
+                .photoUrl(ticketAgent.getPhotoUrl())
                 .counterNumber(ticketAgent.getCounterNumber())
                 .terminalName(ticketAgent.getTerminalName())
                 .shiftStart(ticketAgent.getShiftStart())
@@ -149,4 +154,3 @@ public class TicketAgentService extends UserService {
                 .build();
     }
 }
-

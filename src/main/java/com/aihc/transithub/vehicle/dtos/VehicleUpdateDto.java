@@ -22,4 +22,5 @@ public class VehicleUpdateDto {
     private String licensePlate;
     private String groupName;
     private UUID driverId;
+    private String photoUrl;
 }

@@ -24,6 +24,7 @@ public class TreasurerResponseDto {
     private String lastName;
     private String email;
     private String phone;
+    private String photoUrl;
     private String officeNumber;
     private LocalDate positionStartDate;
     private String bankAccount;

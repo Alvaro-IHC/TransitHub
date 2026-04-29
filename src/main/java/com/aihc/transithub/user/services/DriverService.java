@@ -42,6 +42,7 @@ public class DriverService extends UserService {
         driver.setLastName(driverCreateDto.getLastName());
         driver.setEmail(driverCreateDto.getEmail());
         driver.setPhone(driverCreateDto.getPhone());
+        driver.setPhotoUrl(driverCreateDto.getPhotoUrl());
         driver.setDrivingLicense(driverCreateDto.getDrivingLicense());
         driver.setCategory(driverCreateDto.getCategory());
         driver.setType(driverCreateDto.getType());
@@ -111,6 +112,9 @@ public class DriverService extends UserService {
         if (driverUpdateDto.getPhone() != null) {
             driver.setPhone(driverUpdateDto.getPhone());
         }
+        if (driverUpdateDto.getPhotoUrl() != null) {
+            driver.setPhotoUrl(driverUpdateDto.getPhotoUrl());
+        }
         if (driverUpdateDto.getDrivingLicense() != null) {
             driver.setDrivingLicense(driverUpdateDto.getDrivingLicense());
         }
@@ -172,6 +176,7 @@ public class DriverService extends UserService {
                 .lastName(driver.getLastName())
                 .email(driver.getEmail())
                 .phone(driver.getPhone())
+                .photoUrl(driver.getPhotoUrl())
                 .drivingLicense(driver.getDrivingLicense())
                 .category(driver.getCategory())
                 .type(driver.getType())
