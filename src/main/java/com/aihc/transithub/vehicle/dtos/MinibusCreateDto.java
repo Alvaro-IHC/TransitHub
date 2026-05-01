@@ -24,4 +24,5 @@ public class MinibusCreateDto {
     private String groupName;
     private UUID driverId;
     private MinibusStatus status;
+    private String photoUrl;
 }

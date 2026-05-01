@@ -42,6 +42,7 @@ public class MinibusService {
         minibus.setCapacity(minibusCreateDto.getCapacity());
         minibus.setLicensePlate(minibusCreateDto.getLicensePlate());
         minibus.setGroupName(minibusCreateDto.getGroupName());
+        minibus.setPhotoUrl(minibusCreateDto.getPhotoUrl());
 
         if (minibusCreateDto.getStatus() != null) {
             minibus.setStatus(minibusCreateDto.getStatus());
@@ -112,6 +113,9 @@ public class MinibusService {
         if (minibusUpdateDto.getGroupName() != null) {
             minibus.setGroupName(minibusUpdateDto.getGroupName());
         }
+        if (minibusUpdateDto.getPhotoUrl() != null) {
+            minibus.setPhotoUrl(minibusUpdateDto.getPhotoUrl());
+        }
         if (minibusUpdateDto.getDriverId() != null) {
             Driver driver = driverRepository.findById(minibusUpdateDto.getDriverId())
                     .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + minibusUpdateDto.getDriverId()));
@@ -161,6 +165,7 @@ public class MinibusService {
                 .capacity(minibus.getCapacity())
                 .licensePlate(minibus.getLicensePlate())
                 .groupName(minibus.getGroupName())
+                .photoUrl(minibus.getPhotoUrl())
                 .driverId(minibus.getDriver() != null ? minibus.getDriver().getId() : null)
                 .status(minibus.getStatus())
                 .build();
