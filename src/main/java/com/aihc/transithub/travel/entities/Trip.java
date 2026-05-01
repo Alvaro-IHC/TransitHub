@@ -53,7 +53,7 @@ public class Trip {
     private List<Parcel> parcels;
 
     public String getTime() {
-        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return time == null ? "00:00" : time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
 }

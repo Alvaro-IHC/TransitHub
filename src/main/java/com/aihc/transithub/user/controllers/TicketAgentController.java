@@ -1,5 +1,7 @@
 package com.aihc.transithub.user.controllers;
 
+import com.aihc.transithub.travel.dtos.ParcelResponseDto;
+import com.aihc.transithub.travel.services.ParcelService;
 import com.aihc.transithub.user.dtos.TicketAgentCreateDto;
 import com.aihc.transithub.user.dtos.TicketAgentResponseDto;
 import com.aihc.transithub.user.dtos.TicketAgentUpdateDto;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +26,9 @@ public class TicketAgentController {
 
     @Autowired
     private TicketAgentService ticketAgentService;
+
+    @Autowired
+    private ParcelService parcelService;
 
     /**
      * POST: Create a new ticket agent
@@ -101,6 +107,23 @@ public class TicketAgentController {
         try {
             ticketAgentService.deleteTicketAgent(id);
             return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * GET: Get parcels registered by a ticket agent, optionally filtered by date range
+     * Endpoint: GET /api/ticket-agents/{id}/parcels?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+     */
+    @GetMapping("/{id}/parcels")
+    public ResponseEntity<List<ParcelResponseDto>> getAgentParcels(
+            @PathVariable UUID id,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
+        try {
+            List<ParcelResponseDto> parcels = parcelService.getParcelsByAgentIdAndDateRange(id, startDate, endDate);
+            return ResponseEntity.ok(parcels);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }

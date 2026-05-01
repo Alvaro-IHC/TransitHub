@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -42,6 +44,8 @@ public class Parcel {
 
     private LocalDate date;
 
+    private LocalTime time;
+
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip trip;
@@ -49,4 +53,8 @@ public class Parcel {
     @ManyToOne
     @JoinColumn(name = "agent_id")
     private TicketAgent registerBy;
+
+    public String getTime() {
+        return time == null ? "00:00" : time.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
 }

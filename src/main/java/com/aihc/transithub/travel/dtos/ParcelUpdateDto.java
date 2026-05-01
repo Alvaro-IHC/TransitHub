@@ -25,6 +25,7 @@ public class ParcelUpdateDto {
     private String description;
     private BigDecimal cost;
     private LocalDate date;
+    private String time;
     private UUID tripId;
     private UUID agentId;
 }

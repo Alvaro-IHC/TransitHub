@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,6 +51,7 @@ public class ParcelService {
         parcel.setDescription(parcelCreateDto.getDescription());
         parcel.setCost(parcelCreateDto.getCost());
         parcel.setDate(parcelCreateDto.getDate());
+        parcel.setTime(LocalTime.parse(parcelCreateDto.getTime()));
 
         Trip trip = tripRepository.findById(parcelCreateDto.getTripId())
                 .orElseThrow(() -> new IllegalArgumentException("Trip not found with ID: " + parcelCreateDto.getTripId()));
@@ -91,6 +94,28 @@ public class ParcelService {
     }
 
     /**
+     * Get parcels by agent ID and optional date range
+     */
+    public List<ParcelResponseDto> getParcelsByAgentIdAndDateRange(UUID agentId, LocalDate startDate, LocalDate endDate) {
+        // Verify that the ticket agent exists
+        if (!ticketAgentRepository.existsById(agentId)) {
+            throw new IllegalArgumentException("Ticket Agent not found with ID: " + agentId);
+        }
+
+        List<Parcel> parcels;
+
+        if (startDate != null && endDate != null) {
+            parcels = parcelRepository.findByRegisterByIdAndDateRange(agentId, startDate, endDate);
+        } else {
+            parcels = parcelRepository.findByRegisterById(agentId);
+        }
+
+        return parcels.stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Update a parcel
      */
     public ParcelResponseDto updateParcel(UUID id, ParcelUpdateDto parcelUpdateDto) {
@@ -120,6 +145,9 @@ public class ParcelService {
         }
         if (parcelUpdateDto.getDate() != null) {
             parcel.setDate(parcelUpdateDto.getDate());
+        }
+        if (parcelUpdateDto.getTime() != null) {
+            parcel.setTime(LocalTime.parse(parcelUpdateDto.getTime()));
         }
         if (parcelUpdateDto.getTripId() != null) {
             Trip trip = tripRepository.findById(parcelUpdateDto.getTripId())
@@ -193,6 +221,7 @@ public class ParcelService {
                 .description(parcel.getDescription())
                 .cost(parcel.getCost())
                 .date(parcel.getDate())
+                .time(parcel.getTime())
                 .tripId(parcel.getTrip() != null ? parcel.getTrip().getId() : null)
                 .agentId(parcel.getRegisterBy() != null ? parcel.getRegisterBy().getId() : null)
                 .build();
