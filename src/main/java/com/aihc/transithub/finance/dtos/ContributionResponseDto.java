@@ -22,6 +22,10 @@ public class ContributionResponseDto {
     private UUID id;
     private BigDecimal amount;
     private LocalDate paymentDate;
+    private String paymentTime;
+    private int month;
+    private int year;
+    private String payer;
     private String concept;
     private String receiptNumber;
     private UUID vehicleId;

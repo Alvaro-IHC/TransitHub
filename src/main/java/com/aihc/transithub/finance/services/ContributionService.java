@@ -12,6 +12,7 @@ import com.aihc.transithub.vehicle.repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,6 +43,11 @@ public class ContributionService {
         Contribution contribution = new Contribution();
         contribution.setAmount(contributionCreateDto.getAmount());
         contribution.setPaymentDate(contributionCreateDto.getPaymentDate());
+        contribution.setPaymentTime(contributionCreateDto.getPaymentTime() != null ? 
+                java.time.LocalTime.parse(contributionCreateDto.getPaymentTime()) : null);
+        contribution.setMonth(contributionCreateDto.getMonth());
+        contribution.setYear(contributionCreateDto.getYear());
+        contribution.setPayer(contributionCreateDto.getPayer());
         contribution.setConcept(contributionCreateDto.getConcept());
         contribution.setReceiptNumber(contributionCreateDto.getReceiptNumber());
 
@@ -72,6 +78,28 @@ public class ContributionService {
     public List<ContributionResponseDto> getAllContributions() {
         return contributionRepository.findAll()
                 .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get contributions by treasurer ID and optional date range
+     */
+    public List<ContributionResponseDto> getContributionsByTreasurerIdAndDateRange(UUID treasurerId, LocalDate startDate, LocalDate endDate) {
+        // Verify that the treasurer exists
+        if (!treasurerRepository.existsById(treasurerId)) {
+            throw new IllegalArgumentException("Treasurer not found with ID: " + treasurerId);
+        }
+
+        List<Contribution> contributions;
+
+        if (startDate != null && endDate != null) {
+            contributions = contributionRepository.findByCollectedByIdAndDateRange(treasurerId, startDate, endDate);
+        } else {
+            contributions = contributionRepository.findByCollectedById(treasurerId);
+        }
+
+        return contributions.stream()
                 .map(this::mapToResponseDto)
                 .collect(Collectors.toList());
     }
@@ -108,6 +136,18 @@ public class ContributionService {
         }
         if (contributionUpdateDto.getPaymentDate() != null) {
             contribution.setPaymentDate(contributionUpdateDto.getPaymentDate());
+        }
+        if (contributionUpdateDto.getPaymentTime() != null) {
+            contribution.setPaymentTime(java.time.LocalTime.parse(contributionUpdateDto.getPaymentTime()));
+        }
+        if (contributionUpdateDto.getMonth() != 0) {
+            contribution.setMonth(contributionUpdateDto.getMonth());
+        }
+        if (contributionUpdateDto.getYear() != 0) {
+            contribution.setYear(contributionUpdateDto.getYear());
+        }
+        if (contributionUpdateDto.getPayer() != null) {
+            contribution.setPayer(contributionUpdateDto.getPayer());
         }
         if (contributionUpdateDto.getConcept() != null) {
             contribution.setConcept(contributionUpdateDto.getConcept());
@@ -166,6 +206,10 @@ public class ContributionService {
                 .id(contribution.getId())
                 .amount(contribution.getAmount())
                 .paymentDate(contribution.getPaymentDate())
+                .paymentTime(contribution.getPaymentTime())
+                .month(contribution.getMonth())
+                .year(contribution.getYear())
+                .payer(contribution.getPayer())
                 .concept(contribution.getConcept())
                 .receiptNumber(contribution.getReceiptNumber())
                 .vehicleId(contribution.getVehicle().getId())

@@ -19,6 +19,10 @@ import java.util.UUID;
 public class ContributionUpdateDto {
     private BigDecimal amount;
     private LocalDate paymentDate;
+    private String paymentTime;
+    private int month;
+    private int year;
+    private String payer;
     private String concept;
     private String receiptNumber;
     private UUID vehicleId;
