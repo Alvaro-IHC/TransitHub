@@ -6,6 +6,10 @@ import com.aihc.transithub.travel.dtos.TripUpdateDto;
 import com.aihc.transithub.travel.entities.Trip;
 import com.aihc.transithub.travel.enums.TripStatus;
 import com.aihc.transithub.travel.repositories.TripRepository;
+import com.aihc.transithub.travel.websocket.TravelWebSocketHandler;
+import com.aihc.transithub.travel.websocket.TravelWebSocketMessage;
+import com.aihc.transithub.travel.websocket.WebSocketEntityType;
+import com.aihc.transithub.travel.websocket.WebSocketEventType;
 import com.aihc.transithub.vehicle.entities.Minibus;
 import com.aihc.transithub.vehicle.repositories.MinibusRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +34,9 @@ public class TripService {
 
     @Autowired
     private MinibusRepository minibusRepository;
+
+    @Autowired
+    private TravelWebSocketHandler webSocketHandler;
 
     /**
      * Create a new trip
@@ -110,7 +117,17 @@ public class TripService {
         }
 
         Trip updatedTrip = tripRepository.save(trip);
-        return mapToResponseDto(updatedTrip);
+        TripResponseDto responseDto = mapToResponseDto(updatedTrip);
+
+        // Broadcast WebSocket event
+        TravelWebSocketMessage message = TravelWebSocketMessage.builder()
+                .eventType(WebSocketEventType.UPDATED)
+                .entityType(WebSocketEntityType.TRIP)
+                .timestamp(System.currentTimeMillis())
+                .build();
+        webSocketHandler.broadcastEvent(message);
+
+        return responseDto;
     }
 
     /**

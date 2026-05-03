@@ -7,6 +7,10 @@ import com.aihc.transithub.travel.entities.Parcel;
 import com.aihc.transithub.travel.entities.Trip;
 import com.aihc.transithub.travel.repositories.ParcelRepository;
 import com.aihc.transithub.travel.repositories.TripRepository;
+import com.aihc.transithub.travel.websocket.TravelWebSocketHandler;
+import com.aihc.transithub.travel.websocket.TravelWebSocketMessage;
+import com.aihc.transithub.travel.websocket.WebSocketEntityType;
+import com.aihc.transithub.travel.websocket.WebSocketEventType;
 import com.aihc.transithub.user.entities.TicketAgent;
 import com.aihc.transithub.user.repositories.TicketAgentRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +40,9 @@ public class ParcelService {
     @Autowired
     private TicketAgentRepository ticketAgentRepository;
 
+    @Autowired
+    private TravelWebSocketHandler webSocketHandler;
+
     /**
      * Create a new parcel
      */
@@ -62,7 +69,17 @@ public class ParcelService {
         parcel.setRegisterBy(agent);
 
         Parcel savedParcel = parcelRepository.save(parcel);
-        return mapToResponseDto(savedParcel);
+        ParcelResponseDto responseDto = mapToResponseDto(savedParcel);
+
+        // Broadcast WebSocket event
+        TravelWebSocketMessage message = TravelWebSocketMessage.builder()
+                .eventType(WebSocketEventType.CREATED)
+                .entityType(WebSocketEntityType.PARCEL)
+                .timestamp(System.currentTimeMillis())
+                .build();
+        webSocketHandler.broadcastEvent(message);
+
+        return responseDto;
     }
 
     /**
