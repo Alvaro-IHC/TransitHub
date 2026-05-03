@@ -5,6 +5,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import com.aihc.transithub.travel.websocket.TravelWebSocketHandler;
+import com.aihc.transithub.travel.websocket.CustomWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -23,8 +24,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private TravelWebSocketHandler travelWebSocketHandler;
 
+    @Autowired
+    private CustomWebSocketHandler customWebSocketHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+
+        // Custom events endpoint
+        registry.addHandler(customWebSocketHandler, "/ws/custom")
+                .setAllowedOrigins("*");
+
         // Travel events endpoint
         registry.addHandler(travelWebSocketHandler, "/ws/travel")
                 .setAllowedOrigins("*");
