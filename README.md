@@ -143,3 +143,100 @@ java -jar TransitHub-0.0.1-SNAPSHOT.jar \
 - `deploy.bat` - Deployment script for Windows
 - `application.yaml.example` - Configuration template
 
+## WebSocket Real-Time Events
+
+TransitHub includes WebSocket support for real-time event broadcasting across all connected clients. This enables instant synchronization without requiring page refreshes.
+
+### WebSocket Endpoints
+
+#### 1. Travel Events: `/ws/travel`
+
+Broadcasts real-time events for trips, tickets, and parcels.
+
+**Connection URL:**
+```
+ws://localhost:8080/ws/travel
+```
+
+**Supported Events:**
+
+| Entity | Event Type | Trigger | When | Obs |
+|--------|-----------|---------|------|-----|
+| **TICKET** | CREATED | `POST /api/tickets` | New ticket is created | Done |
+| **TICKET** | UPDATED | `PUT /api/tickets/{id}` | Ticket is modified | TBD |
+| **TICKET** | DELETED | `DELETE /api/tickets/{id}` | Ticket is deleted | TBD |
+| **PARCEL** | CREATED | `POST /api/parcels` | New parcel is created | Done |
+| **PARCEL** | UPDATED | `PUT /api/parcels/{id}` | Parcel is modified | TBD |
+| **PARCEL** | DELETED | `DELETE /api/parcels/{id}` | Parcel is deleted | TBD |
+| **TRIP** | CREATED | `POST /api/trips` | New trip is created | TBD |
+| **TRIP** | UPDATED | `PUT /api/trips/{id}` | Trip status changes or modified | Done |
+| **TRIP** | DELETED | `DELETE /api/trips/{id}` | Trip is deleted | TBD |
+
+**Message Format:**
+
+All WebSocket messages use this JSON structure:
+
+```json
+{
+  "eventType": "CREATED|UPDATED|DELETED",
+  "entityType": "TICKET|PARCEL|TRIP",
+  "timestamp": 1714686887000
+}
+```
+
+**Event Type Values:**
+- `CREATED` - Entity has been created
+- `UPDATED` - Entity has been modified
+- `DELETED` - Entity has been removed
+
+**Entity Type Values:**
+- `TICKET` - A ticket/seat sale
+- `PARCEL` - A package/shipment
+- `TRIP` - A transportation journey
+
+**Example Messages:**
+
+```javascript
+// Ticket Created
+{
+  "eventType": "CREATED",
+  "entityType": "TICKET",
+  "timestamp": 1714686887123
+}
+
+// Parcel Created
+{
+  "eventType": "CREATED",
+  "entityType": "PARCEL",
+  "timestamp": 1714686888456
+}
+
+// Trip Status Changed
+{
+  "eventType": "UPDATED",
+  "entityType": "TRIP",
+  "timestamp": 1714686889789
+}
+```
+
+#### 2. Custom Events: `/ws/custom`
+
+Reserved for custom event handling and future extensions.
+
+**Connection URL:**
+```
+ws://localhost:8080/ws/custom
+```
+
+### Monitoring WebSocket Connections
+
+#### Backend Logs
+
+When clients connect/disconnect:
+
+```
+WebSocket client connected: 550e8400-e29b-41d4-a716-446655440000
+WebSocket client disconnected: 550e8400-e29b-41d4-a716-446655440000
+```
+
+View in application logs when running `./gradlew bootRun`
