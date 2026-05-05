@@ -10,6 +10,8 @@ import com.aihc.transithub.travel.websocket.TravelWebSocketHandler;
 import com.aihc.transithub.travel.websocket.TravelWebSocketMessage;
 import com.aihc.transithub.travel.websocket.WebSocketEntityType;
 import com.aihc.transithub.travel.websocket.WebSocketEventType;
+import com.aihc.transithub.user.entities.TicketAgent;
+import com.aihc.transithub.user.repositories.TicketAgentRepository;
 import com.aihc.transithub.vehicle.entities.Minibus;
 import com.aihc.transithub.vehicle.repositories.MinibusRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,9 @@ public class TripService {
     private MinibusRepository minibusRepository;
 
     @Autowired
+    private TicketAgentRepository ticketAgentRepository;
+
+    @Autowired
     private TravelWebSocketHandler webSocketHandler;
 
     /**
@@ -54,6 +59,10 @@ public class TripService {
         Minibus minibus = minibusRepository.findById(tripCreateDto.getMinibusId())
                 .orElseThrow(() -> new IllegalArgumentException("Minibus not found with ID: " + tripCreateDto.getMinibusId()));
         trip.setMinibus(minibus);
+
+        TicketAgent agent = ticketAgentRepository.findById(tripCreateDto.getAgentId())
+                .orElseThrow(() -> new IllegalArgumentException("Ticket Agent not found with ID: " + tripCreateDto.getAgentId()));
+        trip.setAgent(agent);
 
         Trip savedTrip = tripRepository.save(trip);
         return mapToResponseDto(savedTrip);
@@ -115,6 +124,11 @@ public class TripService {
                     .orElseThrow(() -> new IllegalArgumentException("Minibus not found with ID: " + tripUpdateDto.getMinibusId()));
             trip.setMinibus(minibus);
         }
+        if (tripUpdateDto.getAgentId() != null) {
+            TicketAgent agent = ticketAgentRepository.findById(tripUpdateDto.getAgentId())
+                    .orElseThrow(() -> new IllegalArgumentException("Ticket Agent not found with ID: " + tripUpdateDto.getAgentId()));
+            trip.setAgent(agent);
+        }
 
         Trip updatedTrip = tripRepository.save(trip);
         TripResponseDto responseDto = mapToResponseDto(updatedTrip);
@@ -159,6 +173,10 @@ public class TripService {
         if (tripCreateDto.getMinibusId() == null) {
             throw new IllegalArgumentException("Minibus ID is required");
         }
+
+        if (tripCreateDto.getAgentId() == null) {
+            throw new IllegalArgumentException("Ticket Agent ID is required");
+        }
     }
 
     /**
@@ -173,6 +191,7 @@ public class TripService {
                 .driverName(trip.getDriverName())
                 .status(trip.getStatus())
                 .minibusId(trip.getMinibus() != null ? trip.getMinibus().getId() : null)
+                .agentId(trip.getAgent() != null ? trip.getAgent().getId() : null)
                 .build();
     }
 }

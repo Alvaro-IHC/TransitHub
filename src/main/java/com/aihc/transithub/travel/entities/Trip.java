@@ -1,5 +1,6 @@
 package com.aihc.transithub.travel.entities;
 
+import com.aihc.transithub.user.entities.TicketAgent;
 import com.aihc.transithub.vehicle.entities.Minibus;
 import com.aihc.transithub.travel.enums.TripStatus;
 import jakarta.persistence.*;
@@ -45,6 +46,10 @@ public class Trip {
     @ManyToOne
     @JoinColumn(name = "minibus_id")
     private Minibus minibus;
+
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    private TicketAgent agent;
 
     @OneToMany(mappedBy = "trip")
     private List<Ticket> tickets;

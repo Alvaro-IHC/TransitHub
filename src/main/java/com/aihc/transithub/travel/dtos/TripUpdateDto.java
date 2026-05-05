@@ -23,4 +23,5 @@ public class TripUpdateDto {
     private String driverName;
     private TripStatus status;
     private UUID minibusId;
+    private UUID agentId;
 }

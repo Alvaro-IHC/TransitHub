@@ -21,4 +21,5 @@ public class TripCreateDto {
     private String time;
     private String driverName;
     private UUID minibusId;
+    private UUID agentId;
 }
