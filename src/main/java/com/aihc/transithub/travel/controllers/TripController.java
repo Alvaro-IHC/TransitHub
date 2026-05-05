@@ -55,7 +55,9 @@ public class TripController {
 
     /**
      * GET: Get all trips or filter by status
-     * Endpoint: GET /api/trips?status=NOT_DEPARTED or GET /api/trips?status=DEPARTED
+     * Endpoint: GET /api/trips?status=NOT_DEPARTED
+     * or GET /api/trips?status=DEPARTED
+     * or GET /api/trips?status=COMPLETED
      */
     @GetMapping
     public ResponseEntity<List<TripResponseDto>> getTrips(@RequestParam(required = false) TripStatus status) {

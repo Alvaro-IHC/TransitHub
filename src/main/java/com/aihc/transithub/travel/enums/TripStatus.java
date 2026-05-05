@@ -10,7 +10,8 @@ import lombok.Getter;
 @Getter
 public enum TripStatus {
     NOT_DEPARTED("Not Departed"),
-    DEPARTED("Departed");
+    DEPARTED("Departed"),
+    COMPLETED("Completed");
 
     private final String description;
 
