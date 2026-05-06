@@ -5,6 +5,8 @@ import com.aihc.transithub.user.entities.Driver;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,10 +41,25 @@ public class Vehicle {
     @Column(name = "photo_url")
     private String photoUrl;
 
+    @Column(name = "affiliation_date")
+    private LocalDate affiliationDate;
+
     @ManyToOne
     @JoinColumn(name = "driver_id", referencedColumnName = "id")
     private Driver driver;
 
     @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
     private List<Contribution> contributions;
+
+    public YearMonth getAffiliationYearMonth() {
+        return affiliationDate != null
+                ? YearMonth.from(affiliationDate.getDayOfMonth() > 7
+                    ? affiliationDate.plusMonths(1)
+                    : affiliationDate)
+                : null;
+    }
+
+    public List<YearMonth> getYearMonths() {
+        return contributions.stream().map(Contribution::getYearMonth).toList();
+    }
 }

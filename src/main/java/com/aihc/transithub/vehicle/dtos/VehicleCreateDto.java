@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -25,4 +26,5 @@ public class VehicleCreateDto {
     private UUID driverId;
     private VehicleType type;
     private String photoUrl;
+    private LocalDate affiliationDate;
 }

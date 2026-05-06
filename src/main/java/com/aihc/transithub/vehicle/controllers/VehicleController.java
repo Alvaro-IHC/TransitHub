@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,5 +91,15 @@ public class VehicleController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    /**
+     * GET: Get debts of a vehicle
+     * Endpoint: GET /api/vehicles/{id}/debts
+     */
+    @GetMapping("/{id}/debts")
+    public ResponseEntity<List<YearMonth>> getVehicleDebts(@PathVariable UUID id) {
+        List<YearMonth> debts = vehicleService.getVehicleDebts(id);
+        return ResponseEntity.ok(debts);
     }
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
@@ -61,5 +62,9 @@ public class Contribution {
 
     public String getPaymentTime() {
         return paymentTime == null ? "00:00" : paymentTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public YearMonth getYearMonth() {
+        return YearMonth.of(year, month);
     }
 }

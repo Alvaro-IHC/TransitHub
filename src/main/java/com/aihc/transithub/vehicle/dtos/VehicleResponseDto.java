@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -28,4 +29,5 @@ public class VehicleResponseDto {
     private UUID driverId;
     private VehicleType type;
     private String photoUrl;
+    private LocalDate affiliationDate;
 }

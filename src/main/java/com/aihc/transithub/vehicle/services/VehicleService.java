@@ -1,5 +1,6 @@
 package com.aihc.transithub.vehicle.services;
 
+import com.aihc.transithub.finance.entities.Contribution;
 import com.aihc.transithub.user.entities.Driver;
 import com.aihc.transithub.user.repositories.DriverRepository;
 import com.aihc.transithub.vehicle.dtos.VehicleCreateDto;
@@ -13,6 +14,8 @@ import com.aihc.transithub.vehicle.repositories.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,6 +56,7 @@ public class VehicleService {
         vehicle.setLicensePlate(vehicleCreateDto.getLicensePlate());
         vehicle.setGroupName(vehicleCreateDto.getGroupName());
         vehicle.setPhotoUrl(vehicleCreateDto.getPhotoUrl());
+        vehicle.setAffiliationDate(vehicleCreateDto.getAffiliationDate());
 
         if (vehicleCreateDto.getDriverId() != null) {
             Driver driver = driverRepository.findById(vehicleCreateDto.getDriverId())
@@ -123,6 +127,9 @@ public class VehicleService {
         if (vehicleUpdateDto.getPhotoUrl() != null) {
             vehicle.setPhotoUrl(vehicleUpdateDto.getPhotoUrl());
         }
+        if (vehicleUpdateDto.getAffiliationDate() != null) {
+            vehicle.setAffiliationDate(vehicleUpdateDto.getAffiliationDate());
+        }
 
         Vehicle updatedVehicle = vehicleRepository.save(vehicle);
         return mapToResponseDto(updatedVehicle);
@@ -147,6 +154,9 @@ public class VehicleService {
         }
         if (vehicleCreateDto.getType() == null) {
             throw new IllegalArgumentException("Vehicle type is required");
+        }
+        if (vehicleCreateDto.getAffiliationDate() == null) {
+            throw new IllegalArgumentException("Affiliation date is required");
         }
 
         // Check if license plate already exists
@@ -179,6 +189,28 @@ public class VehicleService {
                 .driverId(vehicle.getDriver() != null ? vehicle.getDriver().getId() : null)
                 .type(type)
                 .photoUrl(vehicle.getPhotoUrl())
+                .affiliationDate(vehicle.getAffiliationDate())
                 .build();
+    }
+
+    public List<YearMonth> getVehicleDebts(UUID id) {
+
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Vehicle not found with ID: " + id));
+        YearMonth start = vehicle.getAffiliationYearMonth();
+        YearMonth end = YearMonth.now();
+
+        List<YearMonth> payments = vehicle.getYearMonths();
+        List<YearMonth> missingMonths = new ArrayList<>();
+        YearMonth current = start;
+
+        while (!current.isAfter(end)) {
+            if (!payments.contains(current)) {
+                missingMonths.add(current);
+            }
+            current = current.plusMonths(1);
+        }
+
+        return missingMonths;
     }
 }
