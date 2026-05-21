@@ -1,5 +1,6 @@
 package com.aihc.transithub.user.services;
 
+import com.aihc.transithub.config.security.PasswordEncoder;
 import com.aihc.transithub.user.dtos.UserCreateDto;
 import com.aihc.transithub.user.dtos.UserResponseDto;
 import com.aihc.transithub.user.dtos.UserUpdateDto;
@@ -41,6 +42,9 @@ public class UserService {
     @Autowired
     private TicketAgentRepository ticketAgentRepository;
 
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
+
     /**
      * Create a new user
      */
@@ -49,7 +53,7 @@ public class UserService {
         
         User user = new User();
         user.setUsername(userCreateDto.getUsername());
-        user.setPassword(userCreateDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
         user.setName(userCreateDto.getName());
         user.setLastName(userCreateDto.getLastName());
         user.setEmail(userCreateDto.getEmail());

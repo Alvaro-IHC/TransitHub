@@ -26,3 +26,8 @@ springdoc:
     enabled: true
     operationsSorter: method
     tagsSorter: alpha
+
+security:
+  jwt:
+    secret: mySecretKeyForJWTGenerationWithAtLeast256BitsOfEntropyToBeSecureAndCanBeChangedInProduction
+    expiration: 86400000  # 24 hours in milliseconds

@@ -32,7 +32,7 @@ public class AdminService extends UserService {
 
         Admin admin = new Admin();
         admin.setUsername(adminCreateDto.getUsername());
-        admin.setPassword(adminCreateDto.getPassword());
+        admin.setPassword(passwordEncoder.encode(adminCreateDto.getPassword()));
         admin.setName(adminCreateDto.getName());
         admin.setLastName(adminCreateDto.getLastName());
         admin.setEmail(adminCreateDto.getEmail());

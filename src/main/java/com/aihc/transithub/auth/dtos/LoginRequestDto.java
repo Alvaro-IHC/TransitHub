@@ -1,11 +1,12 @@
-package com.aihc.transithub.user.dtos;
+package com.aihc.transithub.auth.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for login request containing username/email and password.
+ * Login request DTO for user authentication.
+ * Accepts either username or email along with password.
  *
  * @author Alvaro Huanca
  */
@@ -16,4 +17,5 @@ public class LoginRequestDto {
     private String usernameOrEmail;
     private String password;
 }
+
 

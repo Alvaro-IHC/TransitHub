@@ -32,7 +32,7 @@ public class TicketAgentService extends UserService {
         
         TicketAgent ticketAgent = new TicketAgent();
         ticketAgent.setUsername(ticketAgentCreateDto.getUsername());
-        ticketAgent.setPassword(ticketAgentCreateDto.getPassword());
+        ticketAgent.setPassword(passwordEncoder.encode(ticketAgentCreateDto.getPassword()));
         ticketAgent.setName(ticketAgentCreateDto.getName());
         ticketAgent.setLastName(ticketAgentCreateDto.getLastName());
         ticketAgent.setEmail(ticketAgentCreateDto.getEmail());

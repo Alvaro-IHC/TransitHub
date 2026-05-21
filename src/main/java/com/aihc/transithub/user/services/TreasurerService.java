@@ -32,7 +32,7 @@ public class TreasurerService extends UserService {
 
         Treasurer treasurer = new Treasurer();
         treasurer.setUsername(treasurerCreateDto.getUsername());
-        treasurer.setPassword(treasurerCreateDto.getPassword());
+        treasurer.setPassword(passwordEncoder.encode(treasurerCreateDto.getPassword()));
         treasurer.setName(treasurerCreateDto.getName());
         treasurer.setLastName(treasurerCreateDto.getLastName());
         treasurer.setEmail(treasurerCreateDto.getEmail());

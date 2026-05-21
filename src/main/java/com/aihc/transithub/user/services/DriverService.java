@@ -37,7 +37,7 @@ public class DriverService extends UserService {
         
         Driver driver = new Driver();
         driver.setUsername(driverCreateDto.getUsername());
-        driver.setPassword(driverCreateDto.getPassword());
+        driver.setPassword(passwordEncoder.encode(driverCreateDto.getPassword()));
         driver.setName(driverCreateDto.getName());
         driver.setLastName(driverCreateDto.getLastName());
         driver.setEmail(driverCreateDto.getEmail());
